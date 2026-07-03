@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "SCRIPT=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/bootstrap.sh\"; [ -z \"$SCRIPT\" ] && SCRIPT=\"${CLAUDE_PROJECT_DIR}/.claude/hooks/bootstrap.sh\"; [ -f \"$SCRIPT\" ] && bash \"$SCRIPT\" || true",
+            "async": false
+          }
+        ]
+      }
+    ]
+  }
+}

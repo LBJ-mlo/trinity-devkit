@@ -1,0 +1,21 @@
+{
+  "description": "much_skills platform — 3 libraries, 4 cognitive layers, 39+ skills",
+
+  "permissions": {
+    "allow": [
+      "Bash(git:*)",
+      "Bash(curl:*)",
+      "Bash(jq:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(wc:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "WebFetch",
+      "WebSearch",
+      "Skill(*)"
+    ]
+  }
+}

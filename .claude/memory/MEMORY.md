@@ -1,0 +1,2 @@
+- [Platform Conventions](platform-conventions.md) — always-active operating behaviors
+- [Skill Usage Patterns](skill-usage-patterns.md) — emergent skill sequences for different task types

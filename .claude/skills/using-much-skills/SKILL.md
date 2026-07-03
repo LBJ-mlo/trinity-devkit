@@ -58,6 +58,8 @@ When the user says any of these, invoke `comprehensive-thinking` FIRST:
 | What you need | Primary skill |
 |---------------|--------------|
 | Think deeply about a complex problem | `comprehensive-thinking` |
+| Design project structure / architecture | `architecture-patterns` |
+| Domain model / DDD / bounded contexts | `domain-driven-design` |
 | Brainstorm / design before code | `brainstorming` |
 | Write an implementation plan | `writing-plans` |
 | Break down work into tasks | `planning-and-task-breakdown` |

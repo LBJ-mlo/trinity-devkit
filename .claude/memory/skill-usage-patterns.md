@@ -10,6 +10,15 @@ metadata:
 This file tracks which skill sequences work best for different task types.
 Add patterns as they emerge from actual usage.
 
+## Pattern: Architecture Design (New System)
+architecture-patterns → domain-driven-design → spec-driven-development → planning-and-task-breakdown
+
+## Pattern: DDD Guided Development
+domain-driven-design (strategic: bounded contexts) → domain-driven-design (tactical: aggregates/entities) → architecture-patterns (layer rules) → spec-driven-development → incremental-implementation
+
+## Pattern: Refactoring to Clean Architecture
+architecture-patterns → code-review-and-quality (audit current) → planning-and-task-breakdown → incremental-implementation → code-review-and-quality (verify)
+
 ## Pattern: Bug Fix
 systematic-debugging → debugging-and-error-recovery → pipeline-tdd (gate) → test-driven-development (Prove-It) → verification-before-completion
 

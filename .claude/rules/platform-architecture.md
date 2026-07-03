@@ -1,5 +1,12 @@
 # Platform Architecture — How to manage this platform
 
+## Platform Rules
+
+### Git Push Policy
+- Commits are fine at any time
+- **Before executing `git push`, you MUST ask the user for explicit permission**
+- Never push without user approval — this rule applies to all agents and hooks
+
 ## Layer Classification
 
 When adding a new skill, assign it to one of 4 layers:

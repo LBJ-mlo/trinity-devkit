@@ -250,4 +250,37 @@
 
 **结论可信度：高。** 基于对 42 个技能目录、platform 核心文件的直接检查，以及三个评估框架的交叉验证。唯一不确定的是实际使用中的模型行为——需要更多的实战数据。
 
-**下一步：立即实施 3 个 P0 改进项。**
+---
+
+## P0 改进实施记录（2026-07-03）
+
+### ✅ P0-1: 扩充 CLAUDE.md
+- **前：** 118 行
+- **后：** ~270 行
+- **新增：** 完整决策树、42技能分层目录、链式调用模式、comprehensive-thinking触发词索引、故障排除速查
+
+### ✅ P0-2: 简化三路由
+- **前：** using-much-skills(引导) → using-superpowers(纪律) → using-agent-skills(路由)
+- **后：** using-much-skills(引导+路由一体化，含完整决策树+技能目录) + using-superpowers(纪律)
+- using-agent-skills 保留为补充参考，不再是必经路由
+
+### ✅ P0-3: DB/Auth 技能
+- **状态：** 已识别最佳候选技能（database-patterns, discover-database, auth-patterns）
+- **产物：** RECOMMENDED-SKILLS.md — 含安装命令、评估对比、集成步骤
+- **待办：** 网络恢复后安装（需 GitHub 连接）
+
+### ✅ 额外完成
+- **USAGE.md：** 完整的用法指南 — 5个场景示例、斜杠命令速查、常见对话模式、故障排除
+- **using-much-skills：** 重写为自包含的单一入口 — 决策树+42技能目录+链式模式+冲突解决
+
+### 更新后评分
+
+| 维度 | 之前 | 之后 | 变化 |
+|------|------|------|------|
+| 技能覆盖度 | B+ | B+ | 不变（DB/Auth技能待网络恢复安装） |
+| 整合质量 | A- | A | 三路由简化为二路由 |
+| 可发现性 | B | A- | CLAUDE.md 从118→270行，using-much-skills 自包含 |
+| 可扩展性 | A | A | 不变 |
+| 实用性 | B+ | A- | USAGE.md 提供完整场景示例 |
+| 文档完整性 | B | A- | 新增 USAGE.md、RECOMMENDED-SKILLS.md、CLAUDE.md 扩展 |
+| **综合** | **B+** | **A-** | 从 L3 向 L4 迈进了一步 |

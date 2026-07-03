@@ -17,6 +17,7 @@ metadata:
 6. **No code without a spec** for non-trivial work
 7. **No spec without brainstorming** for non-trivial features
 8. **No completion without verification**
+9. **Ask before git push** — commits are fine, but pushing to remote must be explicitly approved by the user first.
 
 ## Pipeline (session scope)
 

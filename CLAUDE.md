@@ -1,7 +1,7 @@
 # Trinity DevKit — AI 辅助开发平台
 
 **Think × Power × Skill** — 5库合一，42技能，4层认知架构。
-Home: <https://github.com/LBJ-mlo/trinity-devkit> | 用法: [USAGE.md](USAGE.md) | 评审: [PLATFORM-REVIEW.md](PLATFORM-REVIEW.md)
+Home: <https://github.com/LBJ-mlo/trinity-devkit> | 用法: [docs/USAGE.md](docs/USAGE.md) | 评审: [docs/PLATFORM-REVIEW.md](docs/PLATFORM-REVIEW.md)
 
 ---
 

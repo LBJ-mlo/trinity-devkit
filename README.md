@@ -16,7 +16,7 @@
 
 ## 这是什么？
 
-**Trinity DevKit** 将三个顶尖的开源 AI Agent 技能库融合到一个**4层认知架构**中，让 Claude Code 从"能写代码"进化为"能系统化地完成软件工程"。
+**Trinity DevKit** 将三个顶尖的开源 AI Agent 技能库融合到一个**4层认知架构**中，并附带一个 **LLM 智能路由代理**，让 Claude Code 从"能写代码"进化为"能系统化地完成软件工程"。
 
 ```
 ┌──────────────────────────────────────────────────┐
@@ -40,6 +40,7 @@
 - 🔒 **工程纪律保证** — 没写测试就不能写代码，没验证就不能说完成
 - 📐 **完整工程流程** — 从需求访谈到发布上线的每一步都有 SOP
 - ⚡ **高效执行模式** — 并行代理调度、Git Worktree 隔离、自动审查门禁
+- 🔀 **智能路由代理** — LLM 自动判断任务类型，路由到最佳模型（DeepSeek/GLM/Claude）
 
 ---
 
@@ -53,7 +54,7 @@
 | Git Bash | Windows 钩子运行环境 | `winget install Git.Git` |
 | `jq` | JSON 处理（钩子依赖） | `winget install jqlang.jq` / `brew install jq` |
 
-### 安装 (30秒)
+### 安装技能平台 (30秒)
 
 ```bash
 # 1. 克隆仓库
@@ -64,7 +65,19 @@ cd trinity-devkit
 claude
 ```
 
-**完成！** SessionStart 钩子会在每次新会话启动时自动注入平台引导信息。模型立即感知全部 40 个技能。
+SessionStart 钩子会在每次新会话启动时自动注入平台引导信息。模型立即感知全部 42 个技能。
+
+### 安装路由代理（可选）
+
+想自动切换 DeepSeek Flash/DeepSeek Pro/GLM-4 等模型？另开终端：
+
+```bash
+cd packages/proxy-router
+cp .env.example .env   # 填入 API Key
+node server.js
+```
+
+详见 [packages/proxy-router/README.md](packages/proxy-router/README.md)。
 
 ### 验证安装
 
@@ -74,7 +87,7 @@ claude
 你现在有哪些技能可用？
 ```
 
-模型应列出 4 层架构和 40 个技能。如果没列出，检查：
+模型应列出 4 层架构和 42 个技能。如果没列出，检查：
 1. `jq` 是否已安装且在 PATH 中
 2. `.claude/hooks/hooks.json` 是否存在且语法正确
 
@@ -131,6 +144,49 @@ claude
 
 ---
 
+## 仓库结构
+
+本项目采用 **monorepo** 结构，每个目录独立可拔：
+
+```
+trinity-devkit/
+├── README.md                # 总入口（本文件）
+├── CLAUDE.md                # 技能路由中枢（平台核心）
+├── .claude/                 # 42个技能 + hooks + agents（平台核心）
+│
+├── packages/                # 独立子项目（各自可用，互不依赖）
+│   └── proxy-router/        # LLM 智能路由代理
+│       ├── README.md        # 独立文档
+│       ├── server.js        # 代理主程序
+│       ├── routes.js        # 路由规则
+│       └── start.cmd/.sh    # 启动脚本
+│
+└── docs/                    # 文档
+    ├── USAGE.md             # 完整用法指南
+    ├── PLATFORM-REVIEW.md   # 平台评审报告
+    ├── RECOMMENDED-SKILLS.md # 推荐安装的技能
+    └── GIT-GUIDE.md         # Git 操作速查
+```
+
+**按需使用：**
+- 只想用技能平台 → 看 `CLAUDE.md` 和 `.claude/`
+- 只想用路由代理 → 看 `packages/proxy-router/`
+- 两个都要 → 全拉下来，各自按 README 装
+
+## 子项目
+
+### 🧠 Skills Platform（技能平台）
+
+42个技能、4层架构、9个命令、4个角色。详见 [CLAUDE.md](CLAUDE.md) 和 [docs/USAGE.md](docs/USAGE.md)。
+
+### 🔀 Proxy Router（智能路由代理）
+
+LLM 驱动的模型路由器——自动判断任务是"规划分析"还是"编码实现"，转发给 DeepSeek 或 GLM-4。Claude Code 配置永不需要改。
+
+详见 [packages/proxy-router/README.md](packages/proxy-router/README.md)。
+
+---
+
 ## 技能速查
 
 ### Layer 0: 元认知（1个）
@@ -146,7 +202,7 @@ claude
 | `using-much-skills` | 平台引导 — 每次会话启动自动注入，建立4层架构认知 |
 | `using-superpowers` | 纪律层 — 强制"行动前检查技能"，阻止跳过流程 |
 
-### Layer 2: 工程流程（24个，来自 agent-skills）
+### Layer 2: 工程流程（26个，来自 agent-skills + 2个架构知识）
 
 **定义阶段**
 `interview-me` · `idea-refine` · `spec-driven-development`
@@ -156,6 +212,9 @@ claude
 
 **构建阶段**
 `incremental-implementation` · `test-driven-development` · `source-driven-development` · `doubt-driven-development` · `frontend-ui-engineering` · `api-and-interface-design`
+
+**架构阶段**
+`architecture-patterns` · `domain-driven-design`
 
 **验证阶段**
 `browser-testing-with-devtools` · `debugging-and-error-recovery`
@@ -230,44 +289,43 @@ Claude Code 的技能发现机制依赖扁平结构。逻辑分层通过 CLAUDE.
 ```
 trinity-devkit/
 │
-├── CLAUDE.md                      # 🔑 平台中枢 — 技能速查、冲突解决、管理规则
-├── README.md                      # 本文件
+├── CLAUDE.md                      # 🔑 平台中枢 — 技能速查、决策树、管理规则
+├── README.md                      # 总入口（本文件）
 ├── LICENSE                        # MIT（平台原创）+ 第三方协议声明
 ├── CONTRIBUTING.md                # 贡献指南
 ├── .gitignore
 │
 ├── .claude/
 │   ├── settings.json              # 权限和自动化配置
-│   ├── settings.local.json        # 个人覆盖配置（gitignored）
 │   │
-│   ├── skills/                    # 40 个技能（扁平结构）
-│   │   ├── using-much-skills/     # ★ 平台统一引导（本项目的核心创新）
+│   ├── skills/                    # 42 个技能（扁平结构）
+│   │   ├── using-much-skills/     # ★ 平台统一引导（自包含路由+决策树+技能目录）
 │   │   ├── comprehensive-thinking/
-│   │   ├── using-superpowers/     # superpowers 纪律引导
-│   │   ├── using-agent-skills/    # agent-skills 决策树
-│   │   ├── pipeline-tdd/          # superpowers TDD（改名）
-│   │   ├── test-driven-development/  # agent-skills TDD
-│   │   ├── brainstorming/
-│   │   ├── subagent-driven-development/
-│   │   ├── spec-driven-development/
-│   │   └── ... (其他 33 个技能)
+│   │   ├── architecture-patterns/
+│   │   ├── domain-driven-design/
+│   │   ├── test-driven-development/
+│   │   ├── pipeline-tdd/
+│   │   └── ... (其他 36 个技能)
 │   │
 │   ├── agents/                    # 4 个专家 Agent 角色
 │   ├── commands/                  # 9 个斜杠命令定义
 │   ├── hooks/                     # 统一钩子系统
-│   │   ├── hooks.json             # 合并的钩子配置
-│   │   ├── bootstrap.sh           # ★ 启动引导脚本（注入平台架构）
-│   │   └── ... (SDD缓存、simplify-ignore等)
-│   │
 │   ├── memory/                    # 持久化平台约定
-│   │   ├── MEMORY.md
-│   │   ├── platform-conventions.md
-│   │   └── skill-usage-patterns.md
-│   │
 │   ├── references/                # 8 个参考清单
 │   └── rules/                     # 2 个管理规则
-│       ├── platform-architecture.md
-│       └── skills-contributing.md
+│
+├── packages/                      # 📦 独立子项目
+│   └── proxy-router/              # LLM 智能路由代理
+│       ├── README.md
+│       ├── server.js
+│       ├── routes.js
+│       └── start.cmd / start.sh
+│
+└── docs/                          # 📚 文档
+    ├── USAGE.md                   # 完整用法指南（5个场景）
+    ├── PLATFORM-REVIEW.md         # 平台评审报告（B+→A-）
+    ├── RECOMMENDED-SKILLS.md      # 推荐安装的技能
+    └── GIT-GUIDE.md               # Git 操作速查
 ```
 
 ---

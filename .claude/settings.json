@@ -1,5 +1,9 @@
 {
-  "description": "much_skills platform — 3 libraries, 4 cognitive layers, 39+ skills",
+  "description": "much_skills platform — 3 libraries, 4 cognitive layers, 42 skills",
+
+  "apiKey": "proxy-no-check",
+  "baseURL": "http://localhost:8888/v1",
+  "model": "deepseek-chat",
 
   "permissions": {
     "allow": [

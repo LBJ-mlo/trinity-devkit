@@ -17,6 +17,9 @@ Thumbs.db
 
 # Node (if any scripts are added later)
 node_modules/
+
+# Env files (contains API keys)
+.env
 GIT-GUIDE.md
 GIT-GUIDE.pdf
 demo

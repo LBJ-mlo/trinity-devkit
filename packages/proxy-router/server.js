@@ -153,6 +153,37 @@ async function classifyWithLLM(userMessage) {
   }
 }
 
+// ─── 第1级：简单输入检测（0 tokens）────────────
+// 极短消息、常见回复 → 直接 chat
+function quickFilter(message) {
+  if (typeof message !== 'string') return null;
+  const trimmed = message.trim();
+  // 空消息或超短（≤5个字符）
+  if (!trimmed || trimmed.length <= 5) return 'chat';
+  // 常见的简单确认词
+  const simpleChat = ['好的', '嗯', 'ok', 'okay', '好', '行', '可以', '对',
+    'yes', '是的', '继续', '再来', '然后', 'sure', 'go', 'done', '完了',
+    '收到', '明白', '了解', '知道了', 'nice', '不错', '挺好', '可以了'];
+  if (simpleChat.includes(trimmed.toLowerCase())) return 'chat';
+  return null;
+}
+
+// ─── 第2级：关键词强匹配（0 tokens）────────────
+// 命中某个路由的关键词且差距明显 → 直接决策
+function keywordFastMatch(message) {
+  const msg = message.toLowerCase();
+  const coding = ROUTE_CONFIG.coding.keywords.filter(k => msg.includes(k.toLowerCase())).length;
+  const planning = ROUTE_CONFIG.planning.keywords.filter(k => msg.includes(k.toLowerCase())).length;
+  const chat = ROUTE_CONFIG.chat.keywords.filter(k => msg.includes(k.toLowerCase())).length;
+
+  // 必须有明显差距（≥3分差）才跳过 LLM，否则进入第3级
+  const max = Math.max(coding, planning, chat);
+  if (max === chat && chat >= 2) return 'chat';
+  if (max === coding && coding >= 3) return 'coding';
+  if (max === planning && planning >= 3) return 'planning';
+  return null;  // 差距不够 → 进入第3级 LLM 分类
+}
+
 function keywordFallback(message) {
   const msg = message.toLowerCase();
   const coding = ROUTE_CONFIG.coding.keywords.filter(k => msg.includes(k.toLowerCase())).length;
